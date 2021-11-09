@@ -1,8 +1,15 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { NestFactory } from '@nestjs/core'
+import { AppModule } from './modules/app.module'
+import * as dotenv from 'dotenv'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  dotenv.config()
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'warn'],
+  })
+  const port = process.env.NODE_PORT || 3000
+  await app.listen(port, () => {
+    console.log(`App started on port ${port}`)
+  })
 }
-bootstrap();
+bootstrap()
