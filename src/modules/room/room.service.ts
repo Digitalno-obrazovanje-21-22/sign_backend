@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { maxHeaderSize } from "http";
 import { Room } from "src/entities/room.entity";
 import { Repository } from "typeorm";
 
@@ -18,7 +19,7 @@ export class RoomService {
 
     createRoom(): Promise<Room> {
         let code = (Math.random() + 1).toString(36).substring(2,15);
-        let roomName = (Math.random() + 1).toString(36).substring(2,10)
+        let roomName = Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
         return this.roomRepository.save({
             name: "Room" + roomName,
             code: code,

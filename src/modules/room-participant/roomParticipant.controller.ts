@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { RoomParticipantService } from "./roomParticipant.service";
-import { RoomParticipantCreationDto } from "./RoomParticipantDto";
+import { RoomParticipantCreationDto } from "./RoomParticipant.dto";
 
 
 @Controller('/room-participant')
@@ -13,9 +13,8 @@ export class RoomParticipantController {
         return roomParticipants;
     }    
 
-    @Post('/:roomId/:userId')
-    async joinRoom(@Param('roomId') roomId: number, @Param('userId') userId: number, @Body() data: RoomParticipantCreationDto ){
-        //TODO
-        return;
+    @Post()
+    async joinRoom(@Body() data: RoomParticipantCreationDto ){
+        return await this.roomParticipantService.joinRoom(data);
     }
 }
