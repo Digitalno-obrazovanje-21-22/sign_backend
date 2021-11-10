@@ -7,11 +7,17 @@ import { RoomParticipantCreationDto } from "./RoomParticipant.dto";
 export class RoomParticipantController {
     constructor(private readonly roomParticipantService: RoomParticipantService){}
 
-    @Get('/:roomId/:userId')
-    async getAll(@Param('roomId') roomId: number, @Param('userId') userId: number){
-        const roomParticipants = await this.roomParticipantService.findAll(roomId, userId);
+    @Get('/:roomId')
+    async getAllByRoomId(@Param('roomId') roomId: number){
+        const roomParticipants = await this.roomParticipantService.findAllByRoomId(roomId);
         return roomParticipants;
-    }    
+    } 
+    
+    @Get('/:roomId/:userId')
+    async getParticipant(@Param('roomId') roomId: number, @Param('userId') userId: number){
+        const roomParticipants = await this.roomParticipantService.findOne(roomId, userId);
+        return roomParticipants;
+    } 
 
     @Post()
     async joinRoom(@Body() data: RoomParticipantCreationDto ){

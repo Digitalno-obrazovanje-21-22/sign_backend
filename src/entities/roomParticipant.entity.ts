@@ -13,10 +13,12 @@ export class RoomParticipant extends BaseEntity {
     @Column({ type: 'integer'})
     score: number
 
+    @Column({ type: 'integer'})
     @ManyToOne(() => User, {nullable: false})
     @JoinColumn({ name: 'user_id' })
     userId: number
 
+    @Column({ type: 'integer'})
     @ManyToOne(() => Room, {nullable: false})
     @JoinColumn({ name: 'room_id' })
     roomId: number
