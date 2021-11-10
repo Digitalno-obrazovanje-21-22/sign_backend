@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 import { AuthModule } from './auth/auth.module'
+import { RoomModule } from './room/room.module'
 import { SignModule } from './sign/sign.module'
 import { UserModule } from './user/user.module'
 require('dotenv').config()
@@ -23,6 +24,7 @@ require('dotenv').config()
     AuthModule,
     UserModule,
     SignModule,
+    RoomModule
   ],
 })
 export class AppModule {}
