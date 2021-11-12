@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module'
 import { RoomParticipantModule } from './room-participant/roomParticipant.module'
 import { RoomModule } from './room/room.module'
 import { SignModule } from './sign/sign.module'
+import { AppGatewayModule } from './socket/app-gateway.module'
 import { UserModule } from './user/user.module'
 require('dotenv').config()
 
@@ -27,7 +28,8 @@ require('dotenv').config()
     UserModule,
     SignModule,
     RoomModule,
-    RoomParticipantModule
+    RoomParticipantModule,
+    AppGatewayModule
   ],
 })
 export class AppModule {}
