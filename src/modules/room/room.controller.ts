@@ -1,4 +1,5 @@
 import { Controller, Get, Param, Post } from "@nestjs/common";
+import { Room } from "src/entities/room.entity";
 import { RoomParticipantService } from "../room-participant/roomParticipant.service";
 import { RoomDto } from "./room.dto";
 import { RoomService } from "./room.service";
@@ -8,7 +9,7 @@ export class RoomController {
     constructor(private readonly roomService: RoomService, private readonly roomParticipantService: RoomParticipantService){}
 
     @Get()
-    async getAll(){
+    async getAll(): Promise<RoomDto[]>{
         const rooms = await this.roomService.findAll();
         const participants = await this.roomParticipantService.findAll();
         let roomDtos: RoomDto[] = [];
@@ -29,13 +30,13 @@ export class RoomController {
     }
 
     @Get('/:id')
-    async getById(@Param('id') id: number) {
+    async getById(@Param('id') id: number): Promise<Room> {
       const room = await this.roomService.findOneById(id)
       return room;
     }
 
     @Post()
-    async createRoom(){
+    async createRoom(): Promise<Room>{
       const room = await this.roomService.createRoom();
       return room;
     }
