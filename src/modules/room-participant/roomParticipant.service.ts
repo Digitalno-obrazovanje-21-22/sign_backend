@@ -16,9 +16,16 @@ export class RoomParticipantService {
     return this.roomParticipantRepository.find({ where: { roomId: roomId }, relations: ['user', 'room'] })
   }
 
-  findOne(roomId: number, userId: number): Promise<RoomParticipant> {
+  findOneByRoomIdAndUserId(roomId: number, userId: number): Promise<RoomParticipant> {
     return this.roomParticipantRepository.findOne({
       where: { roomId: roomId, userId: userId },
+      relations: ['user', 'room'],
+    })
+  }
+
+  findOneById(roomParticipantId: number): Promise<RoomParticipant> {
+    return this.roomParticipantRepository.findOne({
+      where: { id: roomParticipantId },
       relations: ['user', 'room'],
     })
   }
@@ -29,5 +36,9 @@ export class RoomParticipantService {
       return existingParticipants.find((p) => p.userId === roomParticipantCreationDto.userId)
     }
     return this.roomParticipantRepository.save(roomParticipantCreationDto)
+  }
+
+  async leaveRoom(roomParticipantId: number) {
+    return this.roomParticipantRepository.delete(roomParticipantId);
   }
 }

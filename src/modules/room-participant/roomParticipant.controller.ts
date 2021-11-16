@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
 import { RoomParticipantService } from "./roomParticipant.service";
 import { RoomParticipantCreationDto } from "./RoomParticipant.dto";
 import { RoomParticipant } from "src/entities/roomParticipant.entity";
@@ -16,12 +16,17 @@ export class RoomParticipantController {
     
     @Get('/:roomId/:userId')
     async getParticipant(@Param('roomId') roomId: number, @Param('userId') userId: number): Promise<RoomParticipant>{
-        const roomParticipants = await this.roomParticipantService.findOne(roomId, userId);
+        const roomParticipants = await this.roomParticipantService.findOneByRoomIdAndUserId(roomId, userId);
         return roomParticipants;
     } 
 
     @Post()
     async joinRoom(@Body() data: RoomParticipantCreationDto ): Promise<RoomParticipant>{
         return await this.roomParticipantService.joinRoom(data);
+    }
+
+    @Delete('/:id')
+    async leaveRoom(@Param('id') roomParticipantId: number){
+        return await this.roomParticipantService.leaveRoom(roomParticipantId);
     }
 }
