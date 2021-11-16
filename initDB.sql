@@ -5,7 +5,8 @@ CREATE TABLE "user" (
   "email" text,
   "password" text,
   "created_at" timestamp DEFAULT (now()),
-  "updated_at" timestamp DEFAULT (now())
+  "updated_at" timestamp DEFAULT (now()),
+  "score" integer
 );
 
 CREATE TABLE "sign" (
@@ -16,6 +17,7 @@ CREATE TABLE "sign" (
 
 CREATE TABLE "room" (
   "id" SERIAL PRIMARY KEY,
+  "name" text,
   "private" boolean,
   "code" text,
   "is_over" boolean,

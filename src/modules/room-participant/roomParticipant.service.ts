@@ -23,7 +23,11 @@ export class RoomParticipantService {
     })
   }
 
-  joinRoom(roomParticipantCreationDto: Partial<RoomParticipantCreationDto>): Promise<RoomParticipant> {
+  async joinRoom(roomParticipantCreationDto: Partial<RoomParticipantCreationDto>): Promise<RoomParticipant> {
+    const existingParticipants = await this.roomParticipantRepository.find({where: {roomId: roomParticipantCreationDto.roomId }});
+    if(( existingParticipants).find((p) => p.userId === roomParticipantCreationDto.userId)){
+      return existingParticipants.find((p) => p.userId === roomParticipantCreationDto.userId)
+    }
     return this.roomParticipantRepository.save(roomParticipantCreationDto)
   }
 }
