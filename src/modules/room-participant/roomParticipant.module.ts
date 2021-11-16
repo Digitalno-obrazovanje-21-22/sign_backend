@@ -9,7 +9,7 @@ import { RoomParticipantController } from './roomParticipant.controller'
 import { RoomParticipantService } from './roomParticipant.service'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RoomParticipant, User, Room]), UserModule, RoomModule],
+  imports: [TypeOrmModule.forFeature([RoomParticipant])],
   providers: [RoomParticipantService],
   exports: [TypeOrmModule, RoomParticipantService],
   controllers: [RoomParticipantController],
