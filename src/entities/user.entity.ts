@@ -26,7 +26,4 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date
-
-  @Column({ type: 'int'})
-  score: number
 }

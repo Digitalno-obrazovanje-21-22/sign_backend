@@ -2,24 +2,24 @@ import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, U
 
 @Entity('room')
 export class Room extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number
-  
-    @Column({ type: 'text' })
-    name: string
-  
-    @Column({ type: 'bool'})
-    private: boolean
+  @PrimaryGeneratedColumn()
+  id: number
 
-    @Column({ type: 'text'})
-    code: string
+  @Column({ type: 'text' })
+  name: string
 
-    @Column({ type: 'boolean'})
-    isOver: boolean
+  @Column({ type: 'bool' })
+  private: boolean
 
-    @CreateDateColumn()
-    createdAt: Date
-  
-    @UpdateDateColumn()
-    updatedAt: Date
+  @Column({ type: 'text' })
+  code: string
+
+  @Column({ type: 'boolean' })
+  isOver: boolean
+
+  @CreateDateColumn()
+  createdAt: Date
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }

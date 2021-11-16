@@ -1,39 +1,36 @@
-import { IsNotEmpty } from "class-validator"
-import { RoomParticipant } from "src/entities/roomParticipant.entity"
+import { IsNotEmpty } from 'class-validator'
+import { RoomParticipant } from 'src/entities/roomParticipant.entity'
 
 export class CreateRoomDto {
-    @IsNotEmpty({ message: 'name should not be empty' })
-    name: string
-  
-    @IsNotEmpty({ message: 'private should be defined' })
-    private: boolean
+  @IsNotEmpty({ message: 'name should not be empty' })
+  name: string
 
-    @IsNotEmpty({ message: 'isOver should be defined' })
-    isOver: boolean
+  @IsNotEmpty({ message: 'private should be defined' })
+  private: boolean
 
-    @IsNotEmpty({ message: 'code should not be empty' })
-    code: string
+  @IsNotEmpty({ message: 'isOver should be defined' })
+  isOver: boolean
 
+  @IsNotEmpty({ message: 'code should not be empty' })
+  code: string
 }
 
 export class RoomDto {
+  @IsNotEmpty()
+  id: number
 
-    @IsNotEmpty()
-    id: number
+  @IsNotEmpty()
+  name: string
 
-    @IsNotEmpty()
-    name: string
-  
-    @IsNotEmpty()
-    private: boolean
+  @IsNotEmpty()
+  private: boolean
 
-    @IsNotEmpty()
-    isOver: boolean
+  @IsNotEmpty()
+  isOver: boolean
 
-    @IsNotEmpty()
-    code: string
+  @IsNotEmpty()
+  code: string
 
-    @IsNotEmpty()
-    roomParticipants: RoomParticipant[]
-
+  @IsNotEmpty()
+  roomParticipants: RoomParticipant[]
 }

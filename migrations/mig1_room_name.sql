@@ -1,0 +1,1 @@
+alter table room add name text;
