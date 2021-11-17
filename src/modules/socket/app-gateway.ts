@@ -21,14 +21,14 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
 
     afterInit(server: Server) {
-        this.logger.log('Init');
+        console.log('Init');
     }
 
     handleDisconnect(client: Socket) {
-        this.logger.log(`Client disconnected: ${client.id}`);
+        console.log(`Client disconnected: ${client.id}`);
     }
 
     handleConnection(client: Socket, ...args: any[]) {
-        this.logger.log(`Client connected: ${client.id}`);
+        console.log(`Client connected: ${client.id}`);
     }
 }

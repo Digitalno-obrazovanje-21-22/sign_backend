@@ -16,8 +16,6 @@ export class RoomController {
     const rooms = await this.roomService.findAll()
     const participants = await this.roomParticipantService.findAll()
     let roomDtos: RoomDto[] = []
-    console.log(rooms)
-    console.log(participants)
     rooms.forEach(room => {
       const roomDto: RoomDto = {
         id: room.id,

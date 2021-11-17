@@ -26,7 +26,12 @@ export class RoomParticipantController {
     }
 
     @Delete('/:id')
-    async leaveRoom(@Param('id') roomParticipantId: number){
-        return await this.roomParticipantService.leaveRoom(roomParticipantId);
+    async deleteById(@Param('id') roomParticipantId: number){
+        return await this.roomParticipantService.deleteById(roomParticipantId);
+    }
+
+    @Delete('/:roomId/:userId')
+    async deleteByRoomIdAndUserId(@Param('roomId') roomId: number, @Param('userId') userId: number){
+        return await this.roomParticipantService.deleteByRoomIdAndUserId(roomId, userId);
     }
 }
