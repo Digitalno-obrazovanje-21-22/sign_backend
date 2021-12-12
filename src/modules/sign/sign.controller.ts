@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common'
+import { Sign } from 'src/entities/sign.entity';
 import { SignService } from '../sign/sign.service'
 import { CreateSignDto, UpdateSignDto } from './sign.dto'
 
@@ -9,6 +10,12 @@ export class SignController {
   @Get()
   async getAll() {
     return this.signService.findAll()
+  }
+
+  @Get('/random')
+  async getRandomSign(){
+    const signs = await this.signService.findAll();
+    return signs[Math.floor(Math.random()*(signs).length)];
   }
 
   @Get('/:id')
