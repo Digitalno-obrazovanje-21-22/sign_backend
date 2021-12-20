@@ -31,9 +31,18 @@ export class RoomController {
   }
 
   @Get('/:id')
-  async getById(@Param('id') id: number): Promise<Room> {
-    const room = await this.roomService.findOneById(id)
-    return room
+  async getById(@Param('id') id: number): Promise<RoomDto> {
+    const room = await this.roomService.findOneById(id);
+    const participants = await this.roomParticipantService.findAllByRoomId(room.id);
+    const roomDto: RoomDto = {
+      id: room.id,
+      name: room.name,
+      private: room.private,
+      isOver: room.isOver,
+      code: room.code,
+      roomParticipants: participants,
+    }
+    return roomDto;
   }
 
   @Post()
