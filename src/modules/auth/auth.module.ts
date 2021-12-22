@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { UserModule } from '../user/user.module'
+import { UserService } from '../user/user.service'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 require('dotenv').config()
@@ -14,7 +15,7 @@ require('dotenv').config()
     }),
   ],
   providers: [AuthService],
-  exports: [AuthService],
+  exports: [AuthService, JwtModule],
   controllers: [AuthController],
 })
 export class AuthModule {}

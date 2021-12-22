@@ -31,18 +31,24 @@ export class RoomParticipantService {
   }
 
   async joinRoom(roomParticipantCreationDto: Partial<RoomParticipantCreationDto>): Promise<RoomParticipant> {
-    const existingParticipants = await this.roomParticipantRepository.find({ where: { roomId: roomParticipantCreationDto.roomId } });
-    if ((existingParticipants).find((p) => p.userId === roomParticipantCreationDto.userId)) {
-      return existingParticipants.find((p) => p.userId === roomParticipantCreationDto.userId)
+    const existingParticipants = await this.roomParticipantRepository.find({
+      where: { roomId: roomParticipantCreationDto.roomId },
+    })
+    if (existingParticipants.find(p => p.userId === roomParticipantCreationDto.userId)) {
+      return existingParticipants.find(p => p.userId === roomParticipantCreationDto.userId)
     }
     return this.roomParticipantRepository.save(roomParticipantCreationDto)
   }
 
   async deleteById(roomParticipantId: number) {
-    return this.roomParticipantRepository.delete(roomParticipantId);
+    return this.roomParticipantRepository.delete(roomParticipantId)
   }
 
   async deleteByRoomIdAndUserId(roomId: number, userId: number) {
-    return this.roomParticipantRepository.delete({roomId, userId});
+    return this.roomParticipantRepository.delete({ roomId, userId })
+  }
+
+  async leaveRooms(userId) {
+    return this.roomParticipantRepository.delete({ userId })
   }
 }

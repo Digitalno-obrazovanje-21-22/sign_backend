@@ -18,6 +18,14 @@ export class AuthService {
     return null
   }
 
+  async getUserByToken(token: string) {
+    //@ts-ignore
+    const { id } = this.jwtService.decode(token)
+    const user = await this.userService.findOneById(id)
+
+    return user
+  }
+
   async generateToken(id: number): Promise<string> {
     return this.jwtService.signAsync({ id })
   }

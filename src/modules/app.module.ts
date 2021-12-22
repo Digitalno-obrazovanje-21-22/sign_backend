@@ -21,7 +21,7 @@ require('dotenv').config()
       database: process.env.DATABASE_NAME,
       synchronize: false,
       namingStrategy: new SnakeNamingStrategy(),
-      logging: true,
+      logging: false,
       autoLoadEntities: true,
     }),
     AuthModule,
@@ -29,7 +29,7 @@ require('dotenv').config()
     SignModule,
     RoomModule,
     RoomParticipantModule,
-    AppGatewayModule
+    AppGatewayModule,
   ],
 })
 export class AppModule {}
