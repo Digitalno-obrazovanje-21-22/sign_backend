@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common'
+import { sign } from 'crypto';
 import { Sign } from 'src/entities/sign.entity';
 import { SignService } from '../sign/sign.service'
 import { CreateSignDto, UpdateSignDto } from './sign.dto'
@@ -13,9 +14,21 @@ export class SignController {
   }
 
   @Get('/random')
-  async getRandomSign(){
-    const signs = await this.signService.findAll();
-    return signs[Math.floor(Math.random()*(signs).length)];
+  async getRandomSigns(){
+    let allSigns = await this.signService.findAll();
+    let randomSigns = [];
+    while(randomSigns.length < 4){
+      	const sign = allSigns[Math.floor(Math.random()*(allSigns).length)]
+        allSigns = allSigns.filter((s, i) => s.id!==sign.id )
+        randomSigns.push({
+          name: sign.name,
+          id: sign.id,
+          isCorrect: false,
+        });
+    }
+    //mark one sign as "correct"
+    randomSigns[0].isCorrect = true;
+    return randomSigns;
   }
 
   @Get('/:id')
