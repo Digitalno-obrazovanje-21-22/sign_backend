@@ -42,4 +42,9 @@ export class RoomParticipantController {
         }
         return await this.roomParticipantService.updateScore(roomParticipantId, data);
     }
+
+    @Put('/sumOverallScore/:userId')
+    async sumOverallUserScore(@Param('userId') userId: number) {
+        return await this.roomParticipantService.sumOverallUserScore(userId);
+    }
 }

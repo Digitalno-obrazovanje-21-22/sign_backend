@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RoomParticipant } from 'src/entities/roomParticipant.entity'
+import { User } from 'src/entities/user.entity'
 import { Repository } from 'typeorm'
 import { RoomParticipantCreationDto, RoomParticipantDto } from './RoomParticipant.dto'
 
 @Injectable()
 export class RoomParticipantService {
-  constructor(@InjectRepository(RoomParticipant) private roomParticipantRepository: Repository<RoomParticipant>) {}
+  constructor(@InjectRepository(RoomParticipant) private roomParticipantRepository: Repository<RoomParticipant>,@InjectRepository(User) private usersRepository: Repository<User>) {}
 
   findAll(): Promise<RoomParticipant[]> {
     return this.roomParticipantRepository.find({ relations: ['user', 'room'] })
@@ -53,6 +54,22 @@ export class RoomParticipantService {
   }
 
   async updateScore(roomParticipantId:number, data: RoomParticipantDto){
+    //update roomParticipant score
     await this.roomParticipantRepository.update(roomParticipantId, data);
+    
+    //update overall user score from all games
+    const roomParticipant: RoomParticipant = await this.roomParticipantRepository.findOne(roomParticipantId);
+    await this.sumOverallUserScore(roomParticipant.userId);
+  }
+
+  async sumOverallUserScore(userId: number){
+    const allUserParticipations = await this.roomParticipantRepository.find({where: { userId: userId }});
+    let overallScore = 0;
+    allUserParticipations.forEach(roomParticipant => {
+        overallScore += roomParticipant.score;
+    })
+    let user: User = await this.usersRepository.findOne(userId);
+    user.score = overallScore;
+    await this.usersRepository.update(userId, user);
   }
 }
