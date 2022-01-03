@@ -14,3 +14,22 @@ export class RoomParticipantCreationDto {
     @IsNotEmpty()
     roomId: number
 }
+
+export class RoomParticipantDto {
+    @IsNotEmpty()
+    id: number
+
+    @IsNotEmpty()
+    isOwner: boolean
+  
+    @IsNotEmpty()
+    score: number
+
+    @IsNotEmpty()
+    userId: number
+
+    @IsNotEmpty()
+    roomId: number
+}
+
+

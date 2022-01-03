@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RoomParticipant } from 'src/entities/roomParticipant.entity'
 import { Repository } from 'typeorm'
-import { RoomParticipantCreationDto } from './RoomParticipant.dto'
+import { RoomParticipantCreationDto, RoomParticipantDto } from './RoomParticipant.dto'
 
 @Injectable()
 export class RoomParticipantService {
@@ -48,7 +48,11 @@ export class RoomParticipantService {
     return this.roomParticipantRepository.delete({ roomId, userId })
   }
 
-  async leaveRooms(userId) {
+  async leaveRooms(userId: number) {
     return this.roomParticipantRepository.delete({ userId })
+  }
+
+  async updateScore(roomParticipantId:number, data: RoomParticipantDto){
+    await this.roomParticipantRepository.update(roomParticipantId, data);
   }
 }

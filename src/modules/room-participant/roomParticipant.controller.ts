@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { RoomParticipantService } from "./roomParticipant.service";
-import { RoomParticipantCreationDto } from "./RoomParticipant.dto";
+import { RoomParticipantCreationDto, RoomParticipantDto } from "./RoomParticipant.dto";
 import { RoomParticipant } from "src/entities/roomParticipant.entity";
 
 
@@ -33,5 +33,13 @@ export class RoomParticipantController {
     @Delete('/:roomId/:userId')
     async deleteByRoomIdAndUserId(@Param('roomId') roomId: number, @Param('userId') userId: number){
         return await this.roomParticipantService.deleteByRoomIdAndUserId(roomId, userId);
+    }
+
+    @Put('/:id')
+    async updateScore(@Param('id') roomParticipantId: number, @Body() data: RoomParticipantDto){
+        if(roomParticipantId===null ){
+            throw new Error("RoomParticipant ID Missing!");
+        }
+        return await this.roomParticipantService.updateScore(roomParticipantId, data);
     }
 }
