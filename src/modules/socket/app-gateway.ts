@@ -10,12 +10,14 @@ import { Logger } from '@nestjs/common'
 import { Socket, Server } from 'socket.io'
 import { AuthService } from '../auth/auth.service'
 import { RoomParticipantService } from '../room-participant/roomParticipant.service'
+import { RoomService } from '../room/room.service'
 
 @WebSocketGateway({ cors: true })
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly authService: AuthService,
     private readonly roomParticipantService: RoomParticipantService,
+    private readonly roomService: RoomService,
   ) {}
 
   @WebSocketServer() server: Server
@@ -44,8 +46,8 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
   @SubscribeMessage('leaveRoom')
   async userLeave(client: Socket, payload: any): Promise<void> {
-    const user = await this.authService.getUserByToken(payload)
-    await this.roomParticipantService.leaveRooms(user.id)
+    const user = await this.authService.getUserByToken(payload.token)
+    await this.roomParticipantService.leaveRoom(user.id, payload.roomId)
   }
 
   @SubscribeMessage('playGame')
@@ -54,8 +56,18 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     const user = await this.authService.getUserByToken(payload.token)
     client.emit(
       'setStep',
-      participants[payload.index || 0].userId == user.id ? { recording: true } : { waiting: true, user },
+      participants[payload.index || 0].userId == user.id
+        ? { recording: true }
+        : { waiting: true, user: participants[payload.index || 0].user },
     )
+  }
+
+  @SubscribeMessage('endGame')
+  async endGame(client: Socket, payload: any): Promise<any> {
+    const room = await this.roomService.findOneById(payload.roomId)
+    room.isOver = true
+    await room.save()
+    client.emit('endGame')
   }
 
   @SubscribeMessage('startGuessing')
@@ -77,7 +89,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     const roomParticipant = await this.roomParticipantService.findAllByRoomId(payload.roomId)
     const roomParticipantIndex = roomParticipant.findIndex(val => val.userId == user.id)
     if (roomParticipantIndex + 1 == roomParticipant.length) {
-      this.server.emit('endGame', '')
+      this.server.emit('endRound', roomParticipant[0].userId)
     }
     this.server.emit('nextPlayer', roomParticipantIndex + 1)
   }

@@ -8,7 +8,14 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ['error', 'warn'],
   })
-  app.use(cors())
+  const domains = ['http://localhost:3000']
+
+  const corsOptions = {
+    origin: new RegExp(`(${domains.join('|')})`),
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  }
+
+  app.enableCors(corsOptions)
   const port = process.env.NODE_PORT || 3001
   await app.listen(port, () => {
     console.log(`App started on port ${port}`)

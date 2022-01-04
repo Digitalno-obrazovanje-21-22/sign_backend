@@ -13,7 +13,11 @@ export class RoomParticipantService {
   }
 
   findAllByRoomId(roomId: number): Promise<RoomParticipant[]> {
-    return this.roomParticipantRepository.find({ where: { roomId: roomId }, relations: ['user', 'room'] })
+    return this.roomParticipantRepository.find({
+      where: { roomId: roomId },
+      relations: ['user', 'room'],
+      order: { userId: 'ASC' },
+    })
   }
 
   findOneByRoomIdAndUserId(roomId: number, userId: number): Promise<RoomParticipant> {
@@ -48,7 +52,7 @@ export class RoomParticipantService {
     return this.roomParticipantRepository.delete({ roomId, userId })
   }
 
-  async leaveRooms(userId) {
-    return this.roomParticipantRepository.delete({ userId })
+  async leaveRoom(userId, roomId) {
+    return this.roomParticipantRepository.delete({ userId, roomId })
   }
 }
