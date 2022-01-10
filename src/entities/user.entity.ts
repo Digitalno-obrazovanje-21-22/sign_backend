@@ -1,4 +1,14 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm'
+import { RoomParticipant } from './roomParticipant.entity'
+import { SignStats } from './signStats.entity'
 
 export type CreateUser = Omit<User, 'id' | 'createdAt' | 'updatedAt'>
 
@@ -20,6 +30,12 @@ export class User extends BaseEntity {
 
   @Column({ type: 'text' })
   password: string
+
+  @OneToMany(() => RoomParticipant, roomParticipant => roomParticipant.user, { nullable: true, onDelete: 'CASCADE' })
+  roomParticipants: RoomParticipant[]
+
+  @OneToMany(() => SignStats, signStats => signStats.user, { nullable: true, onDelete: 'CASCADE' })
+  stats: SignStats[]
 
   @CreateDateColumn()
   createdAt: Date

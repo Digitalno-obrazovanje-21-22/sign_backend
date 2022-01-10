@@ -11,6 +11,10 @@ import { Socket, Server } from 'socket.io'
 import { AuthService } from '../auth/auth.service'
 import { RoomParticipantService } from '../room-participant/roomParticipant.service'
 import { RoomService } from '../room/room.service'
+import { InjectRepository } from '@nestjs/typeorm'
+import { SignStats } from 'src/entities/signStats.entity'
+import { Repository } from 'typeorm'
+import { Sign } from 'src/entities/sign.entity'
 
 @WebSocketGateway({ cors: true })
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -18,6 +22,10 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     private readonly authService: AuthService,
     private readonly roomParticipantService: RoomParticipantService,
     private readonly roomService: RoomService,
+    @InjectRepository(SignStats)
+    private signStatsRepo: Repository<SignStats>,
+    @InjectRepository(Sign)
+    private signRepo: Repository<Sign>,
   ) {}
 
   @WebSocketServer() server: Server
@@ -80,6 +88,8 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     const user = await this.authService.getUserByToken(payload.token)
     const roomParticipant = await this.roomParticipantService.findOneByRoomIdAndUserId(payload.roomId, user.id)
     roomParticipant.score = roomParticipant.score + payload.guessed ? 1 : 0
+    const foundSign = await this.signRepo.findOne({ where: { name: payload.sign } })
+    await this.signStatsRepo.save({ sign: foundSign, user: user, correct: payload.guessed })
     await roomParticipant.save()
   }
 

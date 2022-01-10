@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { RoomParticipant } from 'src/entities/roomParticipant.entity'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 import { AuthModule } from './auth/auth.module'
 import { RoomParticipantModule } from './room-participant/roomParticipant.module'
@@ -19,7 +18,7 @@ require('dotenv').config()
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      synchronize: false,
+      synchronize: true,
       namingStrategy: new SnakeNamingStrategy(),
       logging: false,
       autoLoadEntities: true,

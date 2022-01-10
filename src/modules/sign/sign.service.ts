@@ -10,7 +10,7 @@ export class SignService {
     private signRepository: Repository<Sign>,
   ) {}
   findAll(): Promise<Sign[]> {
-    return this.signRepository.find()
+    return this.signRepository.createQueryBuilder('sign').leftJoinAndSelect('sign.stats', 'signStats').getMany()
   }
 
   findOne(id: number): Promise<Sign> {

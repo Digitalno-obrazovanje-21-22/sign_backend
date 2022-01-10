@@ -35,4 +35,9 @@ export class UserController {
     }
     return this.userService.remove(id)
   }
+
+  @Get('/leaderboard/all')
+  async getLeaderboard() {
+    return this.userService.leaderboard()
+  }
 }
