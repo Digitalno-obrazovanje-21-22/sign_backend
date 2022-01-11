@@ -18,7 +18,11 @@ export class UserService {
   }
 
   findOneById(id: number): Promise<User> {
-    return this.usersRepository.findOne(id)
+    return this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.stats', 'signStats')
+      .where('user.id = :id', { id: id })
+      .getOne()
   }
 
   findOneByEmail(email: string): Promise<User> {

@@ -33,4 +33,13 @@ export class AuthController {
       token: await this.authService.generateToken(user.id),
     }
   }
+
+  @Get('/user/:token')
+  async getUser(@Param('token') token: string) {
+    const user = await this.authService.getUserByToken(token)
+    if (!user) {
+      return null
+    }
+    return this.userService.findOneById(user.id)
+  }
 }
