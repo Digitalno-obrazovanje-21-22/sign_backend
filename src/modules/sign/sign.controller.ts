@@ -48,4 +48,9 @@ export class SignController {
     }
     return this.signService.remove(sign.id)
   }
+
+  @Get('/randomize/signStats')
+  randomizeStats() {
+    return this.signService.populateRandomStats()
+  }
 }
