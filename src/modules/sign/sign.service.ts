@@ -81,7 +81,7 @@ export class SignService {
       signStatsArray = userAndSignsStats.filter(userAndSignStat => userAndSignStat.sign.id == sign.id);
       signPercentages.push({
         signId: sign.id,
-        percentage: signStatsArray.filter(record =>  record.correct == true).length / signStatsArray.length
+        percentage: ((signStatsArray.filter(record =>  record.correct == true).length / signStatsArray.length) * 100).toFixed(2)
        })
     })
 
