@@ -20,7 +20,7 @@ export class RoomService {
         let code = (Math.random() + 1).toString(36).substring(2,15);
         let roomName = Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
         return this.roomRepository.save({
-            name: "Room" + roomName,
+            name: "Room " + roomName,
             code: code,
             isOver: false,
             private: false
