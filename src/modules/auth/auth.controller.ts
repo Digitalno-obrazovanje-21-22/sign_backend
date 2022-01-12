@@ -14,7 +14,7 @@ export class AuthController {
       throw new HttpException('Incorrect username or password', HttpStatus.UNAUTHORIZED)
     }
     return {
-      token: await this.authService.generateToken(user.id),
+      token: await this.authService.generateToken(user.id, user.firstName, user.lastName),
     }
   }
 
@@ -30,7 +30,7 @@ export class AuthController {
     })
 
     return {
-      token: await this.authService.generateToken(user.id),
+      token: await this.authService.generateToken(user.id, user.firstName, user.lastName),
     }
   }
 

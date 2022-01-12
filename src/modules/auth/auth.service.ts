@@ -26,8 +26,8 @@ export class AuthService {
     return user
   }
 
-  async generateToken(id: number): Promise<string> {
-    return this.jwtService.signAsync({ id })
+  async generateToken(id: number, firstName: string, lastName: string): Promise<string> {
+    return this.jwtService.signAsync({ id, firstName, lastName })
   }
 
   hashPassword(password: string): Promise<string> {
