@@ -53,4 +53,10 @@ export class SignController {
   randomizeStats() {
     return this.signService.populateRandomStats()
   }
+
+  @Get('/signStats/:userId')
+  async getSignStatForParticularUser(@Param('userId') userId: number) {
+      return await this.signService.getSignStatForParticularUser(userId)
+
+  }
 }

@@ -52,4 +52,40 @@ export class SignService {
       .reduce((acc, val) => [...acc, ...val], [])
     return this.signStatsRepository.save(promiseArray)
   }
+
+  //TODO: fix and simplify
+  async getSignStatForParticularUser(userId: number) {
+    // return this.signStatsRepository.find({where:{user: userId, sign: signId}});
+    const signs = await this.signRepository.find({})
+    const signStats = await this.signStatsRepository.createQueryBuilder('signStats').leftJoinAndSelect('signStats.sign', 'sign').getMany();
+    const userStats = (await this.signStatsRepository.createQueryBuilder('signStats').leftJoinAndSelect('signStats.user', 'user').getMany()).filter(record => record.user.id == userId);
+
+    //get signStats with user and sign data (for all signs and particular user)
+    let userAndSignsStats = [];
+    userStats.forEach((userStat) => signStats.forEach(signStat => {
+      if (signStat.id == userStat.id) return (
+        userAndSignsStats.push({
+          user: userStat.user,
+          sign: signStat.sign,
+          id: userStat.id,
+          correct: userStat.correct
+        })
+      )
+    }
+    ))
+
+    //get array of percentages for all signs
+    let signPercentages = [];
+    let signStatsArray = []
+    signs.forEach(sign => {
+      signStatsArray = userAndSignsStats.filter(userAndSignStat => userAndSignStat.sign.id == sign.id);
+      signPercentages.push({
+        signId: sign.id,
+        percentage: signStatsArray.filter(record =>  record.correct == true).length / signStatsArray.length
+       })
+    })
+
+    return signPercentages;
+
+  }
 }
