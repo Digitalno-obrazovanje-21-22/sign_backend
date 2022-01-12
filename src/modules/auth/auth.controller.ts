@@ -26,6 +26,7 @@ export class AuthController {
     }
     const user = await this.userService.create({
       ...body,
+      score: 0,
       password: await this.authService.hashPassword(body.password),
     })
 
