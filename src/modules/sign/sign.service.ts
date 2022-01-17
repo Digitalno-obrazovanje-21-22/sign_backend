@@ -41,10 +41,11 @@ export class SignService {
     let promiseArray: any[] = Array.from(Array(100))
       .map(() =>
         users.map(user => {
+          const randomizerDifficulty = Math.round(Math.random() * 60)
           return Array.from(Array(10)).map(() => ({
             user: user,
             sign: signs[Math.floor(Math.random() * signs.length)],
-            correct: Math.random() * 100 > 80,
+            correct: Math.random() * 100 > randomizerDifficulty,
           }))
         }),
       )
@@ -55,37 +56,17 @@ export class SignService {
 
   //TODO: fix and simplify
   async getSignStatForParticularUser(userId: number) {
-    // return this.signStatsRepository.find({where:{user: userId, sign: signId}});
-    const signs = await this.signRepository.find({})
-    const signStats = await this.signStatsRepository.createQueryBuilder('signStats').leftJoinAndSelect('signStats.sign', 'sign').getMany();
-    const userStats = (await this.signStatsRepository.createQueryBuilder('signStats').leftJoinAndSelect('signStats.user', 'user').getMany()).filter(record => record.user.id == userId);
-
-    //get signStats with user and sign data (for all signs and particular user)
-    let userAndSignsStats = [];
-    userStats.forEach((userStat) => signStats.forEach(signStat => {
-      if (signStat.id == userStat.id) return (
-        userAndSignsStats.push({
-          user: userStat.user,
-          sign: signStat.sign,
-          id: userStat.id,
-          correct: userStat.correct
-        })
-      )
-    }
-    ))
-
-    //get array of percentages for all signs
-    let signPercentages = [];
-    let signStatsArray = []
-    signs.forEach(sign => {
-      signStatsArray = userAndSignsStats.filter(userAndSignStat => userAndSignStat.sign.id == sign.id);
-      signPercentages.push({
-        signId: sign.id,
-        percentage: ((signStatsArray.filter(record =>  record.correct == true).length / signStatsArray.length) * 100).toFixed(2)
-       })
-    })
-
-    return signPercentages;
-
+    const userSignStats = await this.signStatsRepository.find({ where: { user: userId }, relations: ['sign'] })
+    return Object.entries(
+      userSignStats.reduce((acc: any, val: SignStats) => {
+        if (acc[val.sign.id] == null) {
+          acc[val.sign.id] = { correct: val.correct ? 1 : 0, total: 1 }
+        } else {
+          acc[val.sign.id].correct += val.correct ? 1 : 0
+          acc[val.sign.id].total++
+        }
+        return acc
+      }, {}),
+    ).map(([key, value]: any) => ({ signId: key, percentage: ((value.correct * 100) / value.total).toFixed(2) }))
   }
 }
