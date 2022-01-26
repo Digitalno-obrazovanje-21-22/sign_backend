@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './modules/app.module'
 import * as dotenv from 'dotenv'
-var cors = require('cors')
+const cors = require('cors')
 
 async function bootstrap() {
   dotenv.config()
